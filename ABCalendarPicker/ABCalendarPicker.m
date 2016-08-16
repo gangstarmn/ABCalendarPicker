@@ -140,31 +140,31 @@
     interval -= fmod(interval, 60);
     highlightedDate = [NSDate dateWithTimeIntervalSince1970:interval];
     
-    if ([(id)self.delegate respondsToSelector:@selector(calendarPicker:shoudSelectDate:withState:)])
-    {
-        if (![(id)self.delegate calendarPicker:self
-                               shoudSelectDate:highlightedDate
-                                     withState:self.currentState])
-        {
-            return;
-        }
-    }
+//    if ([(id)self.delegate respondsToSelector:@selector(calendarPicker:shoudSelectDate:withState:)])
+//    {
+//        if (![(id)self.delegate calendarPicker:self
+//                               shoudSelectDate:highlightedDate
+//                                     withState:self.currentState])
+//        {
+//            return;
+//        }
+//    }
     
     _highlightedDate = highlightedDate;
     
     if ([self providerForState:self.currentState] != nil)
         [self updateTitleForProvider:[self providerForState:self.currentState]];
     
-    //if (self.currentState == ABCalendarPickerStateDays
-    //    || self.currentState == ABCalendarPickerStateWeekdays)
-    //{
-        if ([(id)self.delegate respondsToSelector:@selector(calendarPicker:dateSelected:withState:)])
-        {
-            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                [self.delegate calendarPicker:self dateSelected:self.highlightedDate withState:self.currentState];
-            }];
-        }
-    //}
+//    if (self.currentState == ABCalendarPickerStateDays
+//        || self.currentState == ABCalendarPickerStateWeekdays)
+//    {
+//        if ([(id)self.delegate respondsToSelector:@selector(calendarPicker:dateSelected:withState:)])
+//        {
+//            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+//                [self.delegate calendarPicker:self dateSelected:self.highlightedDate withState:self.currentState];
+//            }];
+//        }
+//    }
 }
 
 - (ABViewPool*)buttonsPool
@@ -530,14 +530,28 @@
                 {
                     if (!control.highlighted)
                     {
-                        // Lets highlight
-                        self.highlightedDate = date;
-                        self.highlightedControl.highlighted = NO;
-                        self.highlightedControl = control;
-                        self.highlightedControl.highlighted = YES;
-                        
-                        [self.oldTileView bringSubviewToFront:self.selectedControl];
-                        [self.oldTileView bringSubviewToFront:control];
+                        if ([(id)self.delegate respondsToSelector:@selector(calendarPicker:shoudSelectDate:withState:)])
+                        {
+                            if ([(id)self.delegate calendarPicker:self
+                                                   shoudSelectDate:date
+                                                         withState:self.currentState])
+                            {
+                                self.highlightedDate = date;
+                                if ([(id)self.delegate respondsToSelector:@selector(calendarPicker:dateSelected:withState:)])
+                                {
+                                    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                                        [self.delegate calendarPicker:self dateSelected:self.highlightedDate withState:self.currentState];
+                                    }];
+                                }
+                                // Lets highlight
+                                self.highlightedControl.highlighted = NO;
+                                self.highlightedControl = control;
+                                self.highlightedControl.highlighted = YES;
+                                
+                                [self.oldTileView bringSubviewToFront:self.selectedControl];
+                                [self.oldTileView bringSubviewToFront:control];
+                            }
+                        }
                     }
                     else
                     {
@@ -1522,10 +1536,10 @@
     [self setState:ABCalendarPickerStateDays animated:NO];
     
     UITapGestureRecognizer * singleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapDetected:)];
-    UITapGestureRecognizer * doubleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(titleClicked:)];
-    doubleTapRecognizer.numberOfTouchesRequired = 2;
+//    UITapGestureRecognizer * doubleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(titleClicked:)];
+//    doubleTapRecognizer.numberOfTouchesRequired = 2;
     [self addGestureRecognizer:singleTapRecognizer];
-    [self addGestureRecognizer:doubleTapRecognizer];
+//    [self addGestureRecognizer:doubleTapRecognizer];
 }
 
 - (void)initWithDefaultProviders
