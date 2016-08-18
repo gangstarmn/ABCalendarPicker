@@ -495,6 +495,9 @@
 
 - (void)tapDetected:(UITapGestureRecognizer *)recognizer
 {
+    NSLog(@"tapDetected tapDetected");
+    NSLog(@"self.currentState %d",self.currentState);
+    ABCalendarPickerState tappedState = self.currentState;
     CGPoint point = [self convertPoint:[recognizer locationInView:recognizer.view] toView:self.mainTileView];
     
     for (int i = 0 ; i < [self.controls count]; i++)
@@ -528,8 +531,8 @@
                 
                 if (!needScrollPrev && !needScrollNext)
                 {
-                    if (!control.highlighted)
-                    {
+//                    if (!control.highlighted)
+//                    {
                         if ([(id)self.delegate respondsToSelector:@selector(calendarPicker:shoudSelectDate:withState:)])
                         {
                             if ([(id)self.delegate calendarPicker:self
@@ -537,12 +540,18 @@
                                                          withState:self.currentState])
                             {
                                 self.highlightedDate = date;
-                                if ([(id)self.delegate respondsToSelector:@selector(calendarPicker:dateSelected:withState:)])
-                                {
-                                    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                                        [self.delegate calendarPicker:self dateSelected:self.highlightedDate withState:self.currentState];
-                                    }];
+                                NSLog(@"self.currentState %d",self.currentState);
+                                NSLog(@"self.previousState %d",self.previousState);
+
+                                if (tappedState == self.currentState) {
+                                    if ([(id)self.delegate respondsToSelector:@selector(calendarPicker:dateSelected:withState:)])
+                                    {
+                                        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                                            [self.delegate calendarPicker:self dateSelected:self.highlightedDate withState:self.currentState];
+                                        }];
+                                    }
                                 }
+                                
                                 // Lets highlight
                                 self.highlightedControl.highlighted = NO;
                                 self.highlightedControl = control;
@@ -552,17 +561,19 @@
                                 [self.oldTileView bringSubviewToFront:control];
                             }
                         }
-                    }
-                    else
-                    {
-                        // Lets segue in
-                        NSInteger index = [self.providers indexOfObject:self.currentProvider];
-                        if (index > 0 && [self.providers objectAtIndex:index-1] != nil)
-                            [self setState:self.currentState-1 animated:YES];
-                        else if (self.currentState == ABCalendarPickerStateWeekdays)
-                            [self setState:self.currentState+1 animated:YES];
-                        self.controlTouchBegin = nil;
-                    }
+//                    }
+//                    else
+//                    {
+//                        NSLog(@"Lets segue in ");
+//
+//                        // Lets segue in
+//                        NSInteger index = [self.providers indexOfObject:self.currentProvider];
+//                        if (index > 0 && [self.providers objectAtIndex:index-1] != nil)
+//                            [self setState:self.currentState-1 animated:YES];
+//                        else if (self.currentState == ABCalendarPickerStateWeekdays)
+//                            [self setState:self.currentState+1 animated:YES];
+//                        self.controlTouchBegin = nil;
+//                    }
                 }
                 else
                 {
