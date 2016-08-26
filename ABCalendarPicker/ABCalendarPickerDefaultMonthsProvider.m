@@ -84,7 +84,9 @@
 - (NSDate*)dateForRow:(NSInteger)row 
             andColumn:(NSInteger)column 
 {
-    NSInteger index = column*[self rowsCount] + row + 1;
+//    NSInteger index = column*[self rowsCount] + row + 1;
+    NSInteger index = row*[self columnsCount] + column + 1;
+
     NSInteger month = [self.calendar ordinalityOfUnit:NSMonthCalendarUnit inUnit:NSYearCalendarUnit forDate:[self.dateOwner highlightedDate]];
     
     NSDateComponents * dateComponents = [[NSDateComponents alloc] init];
