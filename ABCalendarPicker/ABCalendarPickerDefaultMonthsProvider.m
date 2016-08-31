@@ -24,6 +24,12 @@
     {
         self.calendar = [NSCalendar currentCalendar];
         self.dateFormatter = [[NSDateFormatter alloc] init];
+        NSLocale *locale = [NSLocale currentLocale];
+        NSString *langKey = [[NSUserDefaults standardUserDefaults] objectForKey:@"kLanguage"];
+        if (![langKey isEqualToString:@"automat"]) {
+            locale = [[NSLocale alloc] initWithLocaleIdentifier:langKey];
+        }
+        self.dateFormatter.locale = locale;
     }
     return self;
 }
@@ -77,7 +83,13 @@
 
 - (NSString*)titleText
 {
-    self.dateFormatter.dateFormat = [NSDateFormatter dateFormatFromTemplate:@"yyyy" options:0 locale:[NSLocale currentLocale]];
+    NSLocale *locale = [NSLocale currentLocale];
+    NSString *langKey = [[NSUserDefaults standardUserDefaults] objectForKey:@"kLanguage"];
+    if (![langKey isEqualToString:@"automat"]) {
+        locale = [[NSLocale alloc] initWithLocaleIdentifier:langKey];
+    }
+    
+    self.dateFormatter.dateFormat = [NSDateFormatter dateFormatFromTemplate:@"yyyy" options:0 locale:locale];
     return [self.dateFormatter stringFromDate:[self.dateOwner highlightedDate]];
 }
 

@@ -57,6 +57,12 @@
     {
         self.calendar = [NSCalendar currentCalendar];
         self.dateFormatter = [[NSDateFormatter alloc] init];
+        NSLocale *locale = [NSLocale currentLocale];
+        NSString *langKey = [[NSUserDefaults standardUserDefaults] objectForKey:@"kLanguage"];
+        if (![langKey isEqualToString:@"automat"]) {
+            locale = [[NSLocale alloc] initWithLocaleIdentifier:langKey];
+        }
+        self.dateFormatter.locale = locale;
     }
     return self;
 }

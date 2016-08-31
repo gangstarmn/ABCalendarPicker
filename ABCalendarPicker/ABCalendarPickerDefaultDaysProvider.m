@@ -28,7 +28,15 @@
         self.dateFormatter = [[NSDateFormatter alloc] init];
         self.dateFormatter.dateFormat = @"ccc";
         self.dateFormatterTitle = [[NSDateFormatter alloc] init];
-        self.dateFormatterTitle.dateFormat = [NSDateFormatter dateFormatFromTemplate:@"LLLL yyyy" options:0 locale:[NSLocale currentLocale]];
+        NSLocale *locale = [NSLocale currentLocale];
+        NSString *langKey = [[NSUserDefaults standardUserDefaults] objectForKey:@"kLanguage"];
+        if (![langKey isEqualToString:@"automat"]) {
+            locale = [[NSLocale alloc] initWithLocaleIdentifier:langKey];
+        }
+        self.dateFormatterTitle.dateFormat = [NSDateFormatter dateFormatFromTemplate:@"LLLL yyyy" options:0 locale:locale];
+        self.dateFormatterTitle.locale = locale;
+        self.dateFormatter.locale = locale;
+
     }
     return self;
 }

@@ -1539,8 +1539,18 @@
     self.monthsProvider = monthsProvider;
     self.yearsProvider = yearsProvider;
     self.erasProvider = erasProvider;
+    
+    NSLocale *locale = [NSLocale currentLocale];
+    
+    NSString *langKey = [[NSUserDefaults standardUserDefaults] objectForKey:@"kLanguage"];
+    NSLog(@"GG WP %@",langKey);
+    if (![langKey isEqualToString:@"automat"]) {
+        locale = [[NSLocale alloc] initWithLocaleIdentifier:langKey];
+        NSLog(@"GG localeIdentifier %@",locale.localeIdentifier);
 
-    self.calendar = [[NSLocale currentLocale] objectForKey:NSLocaleCalendar];
+    }
+    
+    self.calendar = [locale objectForKey:NSLocaleCalendar];
     //self.calendar = [NSCalendar currentCalendar];//[[NSCalendar alloc] initWithCalendarIdentifier:calendarId];
     //self.calendar.firstWeekday = 2;
     
