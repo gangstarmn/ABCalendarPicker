@@ -495,8 +495,6 @@
 
 - (void)tapDetected:(UITapGestureRecognizer *)recognizer
 {
-    NSLog(@"tapDetected tapDetected");
-    NSLog(@"self.currentState %d",self.currentState);
     ABCalendarPickerState tappedState = self.currentState;
     CGPoint point = [self convertPoint:[recognizer locationInView:recognizer.view] toView:self.mainTileView];
     
@@ -540,8 +538,6 @@
                                                          withState:self.currentState])
                             {
                                 self.highlightedDate = date;
-                                NSLog(@"self.currentState %d",self.currentState);
-                                NSLog(@"self.previousState %d",self.previousState);
 
                                 if (tappedState == self.currentState) {
                                     if ([(id)self.delegate respondsToSelector:@selector(calendarPicker:dateSelected:withState:)])
@@ -1543,11 +1539,8 @@
     NSLocale *locale = [NSLocale currentLocale];
     
     NSString *langKey = [[NSUserDefaults standardUserDefaults] objectForKey:@"kLanguage"];
-    NSLog(@"GG WP %@",langKey);
     if (![langKey isEqualToString:@"automat"]) {
         locale = [[NSLocale alloc] initWithLocaleIdentifier:langKey];
-        NSLog(@"GG localeIdentifier %@",locale.localeIdentifier);
-
     }
     
     self.calendar = [locale objectForKey:NSLocaleCalendar];
