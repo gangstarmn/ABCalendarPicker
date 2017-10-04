@@ -110,7 +110,7 @@
 {
     [self.dateFormatter setDateFormat:@"LLL"];
     NSString * str = [self.dateFormatter stringFromDate:date];
-    return [str substringToIndex:MIN(3,str.length)];
+    return [str substringToIndex:MIN(4,str.length)];
 }
 
 - (UIControlState)controlStateForDate:(NSDate*)date
