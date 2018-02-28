@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 
-typedef id (^ObjectInitBlock)();
+typedef id (^ObjectInitBlock)(void);
 
 @interface ABViewPool : NSObject
 
